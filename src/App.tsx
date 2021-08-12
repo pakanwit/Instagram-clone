@@ -1,7 +1,6 @@
-import logo from './logo.svg'
 import './App.css'
 import React from 'react'
-import MainPage from './Container/Main'
+import MainPage from './Container/Feed'
 
 function App() {
   return (
