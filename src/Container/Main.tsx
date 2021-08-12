@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import Header from '../Components/Header'
 import Card from '../Components/Card'
@@ -68,13 +69,13 @@ const MainPage = () => {
       </HeaderWrapper>
       <ContentWrapper>
         <ContentContainer>
-          { mockData.map((item) => {
+          {mockData.map((item) => {
             return (
               <Card
-                key={ item.id }
-                name={ item.breedName }
-                imgUrl={ item.image }
-                id={ item.id }
+                key={item.id}
+                name={item.breedName}
+                imgUrl={item.image}
+                id={item.id}
               />
             )
           })

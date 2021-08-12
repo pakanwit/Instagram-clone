@@ -39,15 +39,15 @@ const ProfileName = styled.div`
   flex-grow: 1;
 `
 
-const Card = (props) => {
+const Card = (props: any) => {
   const { name = '', imgUrl, id, info, description } = props
   const profileName = name.charAt(0)
   return (
     <>
       <Container>
         <HeaderCard>
-          <ProfileCircle>{ profileName }</ProfileCircle>
-          <ProfileName>{ name }</ProfileName>
+          <ProfileCircle>{profileName}</ProfileCircle>
+          <ProfileName>{name}</ProfileName>
         </HeaderCard>
 
       </Container>
