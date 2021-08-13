@@ -1,58 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import Header from '../Components/Header'
 import Card from '../Components/FeedCard'
-
-const mockData = [
-  {
-    "breedName": "brittany",
-    "image": "https://cdn1-www.dogtime.com/assets/uploads/2011/01/file_22956_brittany-300x189.jpg",
-    "description": "Brittanys were bred as gundogs, and they definitely have birds on the brain. Although they’re often called Brittany Spaniels, the American Kennel Club dropped the word “spaniel” from this pointing breed’s name in 1982.",
-    "dogInfo": {
-      "height": "1 foot, 5 inches to 1 foot, 8 inches tall at the shoulder",
-      "weight": "30 to 40 pounds",
-      "life": "10 to 13 years",
-      "breedGroup": "sporting dogs"
-    },
-    "id": "5eaff43af96b5978ca726d21"
-  },
-  {
-    "breedName": "american staffordshire terrier",
-    "image": "https://cdn3-www.dogtime.com/assets/uploads/2018/01/american-staffordshire-terrier-dog-breed-pictures-cover-650x368.jpg",
-    "description": "The American Staffordshire Terrier is a muscular breed that is known for being strong for its size, yet loving and affectionate with their human family. American Staffordshire Terriers enjoy nothing more than being with the humans they care about, whether they’re out for a jog, playing in the yard, or cuddling up on the couch.",
-    "dogInfo": {
-      "height": "16 to 19 inches",
-      "weight": "40 to 60 pounds",
-      "life": "10 to 15 years",
-      "breedGroup": "terrier dogs"
-    },
-    "id": "5eaff43af96b5978ca726cdf"
-  },
-  {
-    "breedName": "american eskimo dog",
-    "image": "https://cdn3-www.dogtime.com/assets/uploads/2011/01/file_23134_american-eskimo-dog-300x189.jpg",
-    "description": "Called “the dog beautiful” by his admirers, the American Eskimo Dog, or “Eskie,” is a striking fellow with his white coat, sweet expression, and black eyes. He’s a Nordic dog breed, a member of the Spitz family. Eskies are lively, active companion dogs who love to entertain and join in on all family activities. They are outgoing and friendly with family and friends, but reserved with strangers. Although the Eskie is a small dog — 10 to 30 pounds — he has a big-dog attitude.",
-    "dogInfo": {
-      "height": "1 foot, 3 inches to 1 foot, 7 inches tall at the shoulder",
-      "weight": "starts at 30 pounds",
-      "life": "12 to 15 years",
-      "breedGroup": "companion dogs"
-    },
-    "id": "5eaff43af96b5978ca726cdd"
-  },
-  {
-    "breedName": "american pugabull",
-    "image": "https://cdn3-www.dogtime.com/assets/uploads/2019/08/american-pugabull-mixed-dog-breed-pictures-cover-650x368.jpg",
-    "description": "The American Pugabull is a mixed breed dog–a cross between the American Bull Dog and Pug dog breeds. Medium in size, alert, and loyal, these pups inherited some of the best qualities from both of their parents.",
-    "dogInfo": {
-      "height": "12 to 20 inches",
-      "weight": "25 to 70 pounds",
-      "life": "12 to 14 years",
-      "breedGroup": "mixed breed dogs"
-    },
-    "id": "5eaff43af96b5978ca726cde"
-  },
-]
+import { useRecoilState } from 'recoil'
+import { FeedLists, feedLists as feedListsState } from '../stores/atom'
+import { getFeedLists } from '../service/getFeedLists'
 
 const Container = styled.div`
   width: 100%;
@@ -87,7 +39,16 @@ const HeaderWrapper = styled.div`
   position: relative;
 `
 
-const MainPage = () => {
+const Feed = () => {
+  const [feedLists, setFeedLists] = useRecoilState(feedListsState)
+  useEffect(() => {
+    const fetchFeedLists = async () => {
+      const response: FeedLists[] = await getFeedLists()
+      setFeedLists(response)
+    }
+    fetchFeedLists()
+  }, [])
+
   return (
     <Container>
       <HeaderWrapper>
@@ -95,7 +56,7 @@ const MainPage = () => {
       </HeaderWrapper>
       <ContentWrapper>
         <ContentContainer>
-          {mockData.map((item) => {
+          {feedLists.map((item: FeedLists) => {
             return (
               <Card
                 key={item.id}
@@ -114,4 +75,4 @@ const MainPage = () => {
   )
 }
 
-export default MainPage
+export default Feed

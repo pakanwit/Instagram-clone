@@ -1,10 +1,13 @@
-import './App.css'
 import React from 'react'
-import MainPage from './Container/Feed'
+import { RecoilRoot } from 'recoil'
+import './App.css'
+import Feed from './Container/Feed'
 
 function App() {
   return (
-    <MainPage />
+    <RecoilRoot>
+      <Feed />
+    </RecoilRoot>
   )
 }
 
