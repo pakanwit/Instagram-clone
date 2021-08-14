@@ -1,10 +1,10 @@
 import React from "react"
 import ContentLoader from "react-content-loader"
 
-const MyLoader = () => (
+const Skeleton = () => (
   <ContentLoader
     speed={1}
-    width={400}
+    width='100%'
     height={460}
     viewBox="0 0 400 460"
     backgroundColor="#f3f3f3"
@@ -16,5 +16,5 @@ const MyLoader = () => (
   </ContentLoader>
 )
 
-export default MyLoader
+export default Skeleton
 
