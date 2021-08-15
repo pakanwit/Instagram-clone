@@ -11,8 +11,12 @@ const HeaderContainer = styled.div`
   background-color: #fff;
   display: flex;
 `
-const Header = () => {
-  return <HeaderContainer />
+const Header = ({ children }: { children?: React.ReactNode }) => {
+  return (
+    <HeaderContainer>
+      {children}
+    </HeaderContainer>
+  )
 }
 
 export default Header

@@ -1,19 +1,20 @@
 import axios, { AxiosResponse } from 'axios'
 import { baseUrl } from '../utilities/url'
-import { FeedLists } from '../stores/atom'
+import { FeedLists } from '../Stores/atom'
 
 export interface FeedListsResponse {
   currentPage: number
   totalPage: number
+  totalData: number
   data: FeedLists[]
 }
 
 export interface FeedListsRequest {
-  page: number
-  limit: number
+  page?: number
+  limit?: number
+  search?: string
 }
 export const getFeedLists = async (params: FeedListsRequest) => {
-  console.log('params', params)
   try {
     const res: AxiosResponse<FeedListsResponse> = await axios.post(`${baseUrl}/dogs`, params)
     if (!res.data) {

@@ -17,3 +17,9 @@ export const feedLists = atom({
   key: 'feedLists',
   default: [] as FeedLists[],
 })
+
+
+export const search = atom({
+  key: 'search',
+  default: '' as string
+})
