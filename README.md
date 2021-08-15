@@ -1,7 +1,7 @@
 # Instagram-clone
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 # Install
-This project use [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) package.
+Make sure installed [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable) package.\
 `yarn install`
 
 # How to development
