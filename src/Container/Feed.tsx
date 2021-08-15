@@ -15,6 +15,7 @@ import loading from '../assets/loading.gif'
 import Input from '../Components/SearchInput'
 import { useDebounce } from '../Hook/useDebounce'
 import { Config } from '../Config'
+import EmptyPage from '../Components/EmptyPage'
 
 const Container = styled.div`
   width: 100%;
@@ -138,11 +139,15 @@ const Feed = () => {
       </HeaderWrapper>
       <ContentWrapper>
         <ContentContainer>
-          {isLoading ?
+          {isLoading &&
             <LoadingMore>
               <img src={loading} width={34} height={34} alt='Loading...' />
             </LoadingMore>
-            :
+          }
+          {!isLoading && feedLists.length === 0 &&
+            <EmptyPage />
+          }
+          {!isLoading && feedLists.length !== 0 &&
             <InfiniteScroll
               dataLength={feedLists.length}
               next={fetchFeedListsMore}
