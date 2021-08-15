@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import Truncate from 'react-truncate'
 import useDoubleClick from 'use-double-click'
 import { ReactComponent as UnLike } from '../assets/icons/unlike.svg'
+import { ReactComponent as Like } from '../assets/icons/liked.svg'
 import heart from '../assets/heart.png'
 import Typo from './Typography'
 
-interface CardProps {
+interface FeedCardProps {
   name?: string
   imgUrl?: string
   id?: string
@@ -17,6 +18,8 @@ interface CardProps {
     life?: string
     breedGroup?: string
   }
+  handleLike?: (id: string, like: boolean) => void
+  like?: boolean
 }
 
 const Container = styled.article`
@@ -133,8 +136,15 @@ const HeartContainer = styled.div`
   }
 `
 
-const FeedCard = (props: CardProps) => {
-  const { name = '', imgUrl = '', info, description, id = '' } = props
+const FeedCard: React.FC<FeedCardProps> = ({
+  name = '',
+  imgUrl = '',
+  info,
+  description,
+  id = '',
+  handleLike = () => { },
+  like = false
+}) => {
   const [expanded, setExpanded] = useState(false)
   const [truncated, setTruncated] = useState(false)
   const [isShowHeart, setIsShowHeart] = useState(false)
@@ -144,6 +154,10 @@ const FeedCard = (props: CardProps) => {
   useDoubleClick({
     onDoubleClick: (e) => {
       console.log(e, imageButtonRef.current?.id, 'double click')
+      const id = imageButtonRef.current?.id
+      if (id) {
+        handleLike(id, true)
+      }
       setIsShowHeart(true)
       setTimeout(() => {
         setIsShowHeart(false)
@@ -167,7 +181,10 @@ const FeedCard = (props: CardProps) => {
   const toggleLines = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     event.preventDefault()
     setExpanded(!expanded)
+  }
 
+  const handleLikeWithIcon = () => {
+    handleLike(id, !like)
   }
   return (
     <Container>
@@ -184,8 +201,8 @@ const FeedCard = (props: CardProps) => {
         </HeartContainer>
       </ImageButton>
       <InfoSection>
-        <LikeActionSection>
-          <UnLike />
+        <LikeActionSection onClick={handleLikeWithIcon}>
+          {like ? <Like /> : <UnLike />}
         </LikeActionSection>
       </InfoSection>
       <InfoSection>
@@ -193,7 +210,7 @@ const FeedCard = (props: CardProps) => {
           <DogInfoName><Typo fontWeigh='bold'>{name}</Typo></DogInfoName>
           <DogInfoDescription>
             <Truncate
-              lines={!expanded && 1}
+              lines={!expanded && 2}
               ellipsis={<Ellipsis onClick={toggleLines}>... <Typo color='#8e8e8e'>เพิ่มเติม</Typo></Ellipsis>}
               onTruncate={handleTruncate}
               style={{ color: '#262626', fontSize: '14px' }}

@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import InfiniteScroll from "react-infinite-scroll-component"
 import styled from 'styled-components'
+import * as R from 'ramda'
 import Header from '../Components/Header'
 import FeedCard from '../Components/FeedCard'
 import { useRecoilState } from 'recoil'
@@ -8,6 +9,8 @@ import {
   FeedLists,
   feedLists as feedListsState,
   search as searchState,
+  liked as likeState,
+  LikedState
 } from '../Stores/atom'
 import { FeedListsResponse, getFeedLists } from '../Service/getFeedLists'
 import logo from '../assets/logo.png'
@@ -78,6 +81,7 @@ const LoadingMore = styled.div`
 const Feed = () => {
   const [feedLists, setFeedLists] = useRecoilState(feedListsState)
   const [searchQuery, setSearchQuery] = useRecoilState(searchState)
+  const [likeLists, setLikeLists] = useRecoilState(likeState)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalData, setTotalData] = useState(0)
   const [isLoading, setIsLoading] = useState(false)
@@ -118,6 +122,17 @@ const Feed = () => {
     setSearchQuery(value)
     setCurrentPage(1)
     setIsLoading(true)
+  }
+
+  const handleLike = (id: string, like: boolean) => {
+    const newValue: LikedState = { id, like }
+    const filterExistingValue = likeLists.find((value: LikedState) => value.id === id)
+    if (!R.isEmpty(filterExistingValue)) {
+      const removeExistingValue = likeLists.filter((value: LikedState) => value.id !== id)
+      setLikeLists([...removeExistingValue, newValue])
+    } else {
+      setLikeLists([...likeLists, newValue])
+    }
   }
 
   return (
@@ -162,6 +177,7 @@ const Feed = () => {
               style={{ overflow: 'unset' }}
             >
               {feedLists.map((item: FeedLists, index: number) => {
+                const findLike = likeLists.find((value: LikedState) => value.id === item.id)
                 return (
                   <FeedCard
                     key={`${index}-${item.id}`}
@@ -170,6 +186,8 @@ const Feed = () => {
                     id={item.id}
                     description={item.description}
                     info={item.dogInfo}
+                    handleLike={handleLike}
+                    like={findLike?.like}
                   />
                 )
               })

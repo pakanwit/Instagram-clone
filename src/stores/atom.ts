@@ -23,3 +23,12 @@ export const search = atom({
   key: 'search',
   default: '' as string
 })
+
+export interface LikedState {
+  id: string
+  like: boolean
+}
+export const liked = atom({
+  key: 'liked',
+  default: [] as LikedState[]
+})
