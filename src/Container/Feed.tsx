@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import InfiniteScroll from "react-infinite-scroll-component"
 import styled from 'styled-components'
 import Header from '../Components/Header'
-import Card from '../Components/FeedCard'
+import FeedCard from '../Components/FeedCard'
 import { useRecoilState } from 'recoil'
 import {
   FeedLists,
@@ -163,7 +163,7 @@ const Feed = () => {
             >
               {feedLists.map((item: FeedLists, index: number) => {
                 return (
-                  <Card
+                  <FeedCard
                     key={`${index}-${item.id}`}
                     name={item.breedName}
                     imgUrl={item.image}

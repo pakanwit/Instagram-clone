@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import Truncate from 'react-truncate'
+import useDoubleClick from 'use-double-click'
 import { ReactComponent as UnLike } from '../assets/icons/unlike.svg'
+import heart from '../assets/heart.png'
 import Typo from './Typography'
 
 interface CardProps {
@@ -59,6 +61,7 @@ const ProfileName = styled.div`
 const ImageButton = styled.div`
   touch-action: manipulation;
   margin-top: 4px;
+  position: relative;
 `
 
 const ImageWrapper = styled.div`
@@ -104,11 +107,56 @@ const Ellipsis = styled.span`
   cursor: pointer;
 `
 
-const Card = (props: CardProps) => {
-  const { name = '', imgUrl = '', info, description } = props
+const HeartContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  & > span {
+    display: block;
+    width: 128px;
+    height: 128px;
+    background: url(${heart}) no-repeat center/contain;;
+    animation-duration: 1000ms;
+    animation-name: like-heart-animation;
+    animation-timing-function: ease-in-out;
+    transform: scale(0);
+
+    @keyframes like-heart-animation{ 
+      0% { opacity:0; transform:scale(0); }
+      15% { opacity:.9; transform:scale(1.2); }
+      30% { transform:scale(.95); }
+      45%,
+      80% { opacity:.9; transform:scale(1); }
+    }
+  }
+`
+
+const FeedCard = (props: CardProps) => {
+  const { name = '', imgUrl = '', info, description, id = '' } = props
   const [expanded, setExpanded] = useState(false)
   const [truncated, setTruncated] = useState(false)
+  const [isShowHeart, setIsShowHeart] = useState(false)
   const profileName = name.charAt(0)
+
+  const imageButtonRef = useRef<HTMLDivElement>(null)
+  useDoubleClick({
+    onDoubleClick: (e) => {
+      console.log(e, imageButtonRef.current?.id, 'double click')
+      setIsShowHeart(true)
+      setTimeout(() => {
+        setIsShowHeart(false)
+      }, 1000)
+
+    },
+    ref: imageButtonRef,
+    /**
+     * The amount of time (in milliseconds) to wait 
+     * before differentiating a single from a double click
+     */
+    latency: 250
+  })
 
   const handleTruncate = (truncatedParam: boolean) => {
     if (truncated !== truncatedParam) {
@@ -127,10 +175,13 @@ const Card = (props: CardProps) => {
         <ProfileCircle>{profileName}</ProfileCircle>
         <ProfileName><Typo fontWeigh='bold'>{name}</Typo></ProfileName>
       </HeaderCard>
-      <ImageButton>
+      <ImageButton id={id} ref={imageButtonRef}>
         <ImageWrapper>
           <Img src={imgUrl} alt='Image' />
         </ImageWrapper>
+        <HeartContainer>
+          {isShowHeart && <span />}
+        </HeartContainer>
       </ImageButton>
       <InfoSection>
         <LikeActionSection>
@@ -158,4 +209,4 @@ const Card = (props: CardProps) => {
   )
 }
 
-export default Card
+export default FeedCard
